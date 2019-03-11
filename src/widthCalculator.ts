@@ -131,7 +131,7 @@ function fitContent(table) {
             }
 
             let lineCount = Array.isArray(cell.text) ? cell.text.length : 1;
-            let fontHeight = cell.styles.fontSize / state().scaleFactor() * FONT_ROW_RATIO;
+            let fontHeight = cell.styles.fontSize / state().scaleFactor() * (cell.styles.lineHeight || FONT_ROW_RATIO);
             cell.contentHeight = lineCount * fontHeight + cell.padding('vertical');
 
             if (cell.styles.minCellHeight > cell.contentHeight) {

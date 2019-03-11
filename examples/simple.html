@@ -58,13 +58,24 @@
             [2, "Switzerland", 	7.509, "Bern"],
             [3, "Iceland", 7.501, "Reykjavík"],
             [4, "Norway", 7.498, "Oslo"],
-            [5, "Finland", 7.413, "Helsinki"]
+            [5, "Finland", 7.413, `Helsinki`]
         ];
 
+        var styles = {
+            fontSize: 14,
+            lineHeight: 1.15,
+            valign: 'middle',
+            cellWidth: 'wrap',
+            rowPageBreak: 'auto',
+            halign: 'justify'
+        }
+
+        var columnStyles = { 3: { cellWidth: 'auto' } }
+
         var doc = new jsPDF();
-        doc.autoTable({head: head, body: body});
-        doc.autoTable({html: '#table', startY: 100});
-        doc.output("dataurlnewwindow");
+        doc.autoTable({ head, body, styles, columnStyles });
+        // doc.autoTable({ html: '#table', startY: 100 });
+        doc.save("pdf");
     }
 </script>
 </body>

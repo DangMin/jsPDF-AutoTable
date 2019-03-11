@@ -62,7 +62,7 @@ function printFullRow(row: Row, isLastRow) {
                     continue;
                 }
 
-                let fontHeight = cell.styles.fontSize / state().scaleFactor() * FONT_ROW_RATIO;
+                let fontHeight = cell.styles.fontSize / state().scaleFactor() * (cell.styles.lineHeight || FONT_ROW_RATIO);
                 let vPadding = cell.padding('vertical');
                 let remainingLineCount = Math.floor((remainingPageSpace - vPadding) / fontHeight);
 
@@ -145,6 +145,7 @@ function printRow(row) {
             table.cursor.x += column.width;
             continue;
         }
+
         applyStyles(cell.styles);
 
         cell.x = table.cursor.x;
@@ -177,7 +178,8 @@ function printRow(row) {
         state().doc.autoTableText(cell.text, cell.textPos.x, cell.textPos.y, {
             halign: cell.styles.halign,
             valign: cell.styles.valign,
-            maxWidth: cell.width - cell.padding('left') - cell.padding('right')
+            maxWidth: cell.width - cell.padding('left') - cell.padding('right'),
+            lineHeight: cell.styles.lineHeight,
         });
 
         table.callCellHooks(table.cellHooks.didDrawCell, cell, row, column);
