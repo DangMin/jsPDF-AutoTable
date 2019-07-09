@@ -771,7 +771,8 @@ function printRow(row) {
         state_1.default().doc.autoTableText(cell.text, cell.textPos.x, cell.textPos.y, {
             halign: cell.styles.halign,
             valign: cell.styles.valign,
-            maxWidth: cell.width - cell.padding('left') - cell.padding('right')
+            maxWidth: cell.width - cell.padding('left') - cell.padding('right'),
+            lineHeightFactor: cell.styles.lineHeightFactor || config_1.FONT_ROW_RATIO
         });
         table.callCellHooks(table.cellHooks.didDrawCell, cell, row, column);
         table.cursor.x += column.width;
@@ -959,7 +960,8 @@ function fitContent(table) {
                 cell.text = cell.styles.overflow(cell.text, textSpace);
             }
             var lineCount = Array.isArray(cell.text) ? cell.text.length : 1;
-            var fontHeight = cell.styles.fontSize / state_1.default().scaleFactor() * config_1.FONT_ROW_RATIO;
+            var lineHeightFactor = cell.styles.lineHeightFactor !== undefined ? cell.styles.lineHeightFactor : config_1.FONT_ROW_RATIO;
+            var fontHeight = cell.styles.fontSize / state_1.default().scaleFactor() * lineHeightFactor;
             cell.contentHeight = lineCount * fontHeight + cell.padding('vertical');
             if (cell.styles.minCellHeight > cell.contentHeight) {
                 cell.contentHeight = cell.styles.minCellHeight;
@@ -1833,7 +1835,11 @@ jsPDF.API.autoTableText = function (text, x, y, styles) {
         lineCount = splitText.length || 1;
     }
     // Align the top
-    y += fontSize * (2 - FONT_ROW_RATIO);
+    var top = 0;
+    if (styles.lineHeightFactor !== undefined) {
+        top = (fontSize * styles.lineHeightFactor - fontSize) / 2;
+    }
+    y += (fontSize + top) * (2 - FONT_ROW_RATIO);
     if (styles.valign === 'middle')
         y -= (lineCount / 2) * fontSize * FONT_ROW_RATIO;
     else if (styles.valign === 'bottom')
@@ -1844,7 +1850,7 @@ jsPDF.API.autoTableText = function (text, x, y, styles) {
             alignSize *= 0.5;
         if (lineCount >= 1) {
             for (var iLine = 0; iLine < splitText.length; iLine++) {
-                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y);
+                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y, { lineHeightFactor: styles.lineHeightFactor });
                 y += fontSize;
             }
             return this;
@@ -1852,10 +1858,10 @@ jsPDF.API.autoTableText = function (text, x, y, styles) {
         x -= this.getStringUnitWidth(text) * alignSize;
     }
     if (styles.halign === 'justify') {
-        this.text(text, x, y, { maxWidth: styles.maxWidth || 100, align: 'justify' });
+        this.text(text, x, y, { maxWidth: styles.maxWidth || 100, align: 'justify', lineHeightFactor: styles.lineHeightFactor });
     }
     else {
-        this.text(text, x, y);
+        this.text(text, x, y, { lineHeightFactor: styles.lineHeightFactor });
     }
     return this;
 };
