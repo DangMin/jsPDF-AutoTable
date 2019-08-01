@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "strictNullChecks": false,
-    "target": "ES5"
+    "target": "ES5",
+    "lib": ["es2017", "dom"]
   },
   "include": [
     "src/**/*"
-  ]
+  ],
 }

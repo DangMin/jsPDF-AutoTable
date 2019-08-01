@@ -54,16 +54,16 @@
     function generate() {
         var head = [["ID", "Country", "Rank", "Capital"]];
         var body = [
-            [1, "Denmark", 7.526, "Copenhagen"],
-            [2, "Switzerland", 	7.509, "Bern"],
+            [1, "Denmark", 7.526, "Copenhagen\nTiggeri\nPanda"],
+            [2, "Switzerland", 	7.509, "Bern\nNighogg"],
             [3, "Iceland", 7.501, "Reykjavík"],
             [4, "Norway", 7.498, "Oslo"],
             [5, "Finland", 7.413, "Helsinki\nsecond line\nthirdline"]
         ];
 
         var doc = new jsPDF();
-        doc.autoTable({head: head, body: body, styles: {lineHeightFactor: 1.5}});
-        doc.autoTable({html: '#table', startY: 100, styles: {lineHeightFactor: 1.5}});
+        doc.autoTable({head: head, body: body, styles: {lineHeightFactor: 1.5}, startY: 238, margin: {top:20, bottom:20, left:10, right:10}});
+        // doc.autoTable({html: '#table', startY: 260, styles: {lineHeightFactor: 1.5}});
         doc.output("dataurlnewwindow");
     }
 </script>

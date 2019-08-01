@@ -2,6 +2,7 @@ import {FONT_ROW_RATIO} from './config';
 import {getFillStyle, addTableBorder, applyStyles, applyUserStyles} from './common';
 import {Row, Table} from "./models";
 import state from "./state";
+import {Cell} from './models'
 
 export function drawTable(table: Table) {
     let settings = table.settings;
@@ -18,10 +19,38 @@ export function drawTable(table: Table) {
         nextPage(state().doc);
         table.cursor.y = table.margin('top');
     }
-    table.pageStartX = table.cursor.x;
-    table.pageStartY = table.cursor.y;
+   
     
     table.startPageNumber = state().pageNumber();
+
+
+    let firstRowHeight = 0, secondRowHeight = 0;
+
+    if (table.body) {
+        if(table.body[0]){
+            const cells = Object.values(table.body[0].cells);
+
+            firstRowHeight = cells.reduce((acc, cell) => acc < (<Cell>cell).height ? (<Cell>cell).height : acc, (<Cell[]>cells)[0].height) as number
+        }
+
+        if (table.body[1]){
+            const cells = Object.values(table.body[1].cells)
+
+            secondRowHeight = cells.reduce((acc, cell) => acc > (<any>cell).height ? (<any>cell).height : acc, (<any[]>cells)[0].height) as number
+        }
+    }
+
+    
+    let lowerLimit = table.cursor.y + table.headHeight + firstRowHeight + secondRowHeight + table.margin('bottom')
+
+
+    if (lowerLimit > state().pageHeight()) {
+        nextPage(state().doc)
+        table.cursor.y = table.margin('top')
+    }
+
+    table.pageStartX = table.cursor.x;
+    table.pageStartY = table.cursor.y;
 
     applyUserStyles();
     if (settings.showHead === true || settings.showHead === 'firstPage' || settings.showHead === 'everyPage') {

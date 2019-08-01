@@ -51,5 +51,7 @@
     "url": "https://github.com/simonbengtsson/jsPDF-AutoTable/issues"
   },
   "homepage": "https://simonbengtsson.github.io/jsPDF-AutoTable",
-  "dependencies": {}
+  "dependencies": {
+    "core-js": "^3.1.4"
+  }
 }
