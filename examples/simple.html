@@ -61,8 +61,8 @@
             [5, "Finland", 7.413, "Helsinki\nsecond line\nthirdline"]
         ];
 
-        var doc = new jsPDF();
-        doc.autoTable({head: head, body: body, styles: {lineHeightFactor: 1.5}, startY: 238, margin: {top:20, bottom:20, left:10, right:10}});
+        var doc = new jsPDF({unit: 'mm'});
+        doc.autoTable({head: head, body: body, styles: {lineHeightFactor: 1.5, charSpace: 1.15 }, startY: 238, margin: {top:20, bottom:20, left:10, right:10}});
         // doc.autoTable({html: '#table', startY: 260, styles: {lineHeightFactor: 1.5}});
         doc.output("dataurlnewwindow");
     }

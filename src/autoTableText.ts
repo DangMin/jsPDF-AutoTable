@@ -42,7 +42,7 @@ jsPDF.API.autoTableText = function(text, x, y, styles) {
 
         if (lineCount >= 1) {
             for (let iLine = 0; iLine < splitText.length; iLine++) {
-                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y, { lineHeightFactor: styles.lineHeightFactor});
+                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y, { lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
                 y += fontSize;
             }
             return this;
@@ -51,9 +51,9 @@ jsPDF.API.autoTableText = function(text, x, y, styles) {
     }
 
     if (styles.halign === 'justify') {
-        this.text(text, x, y, {maxWidth: styles.maxWidth || 100, align: 'justify', lineHeightFactor: styles.lineHeightFactor});
+        this.text(text, x, y, {maxWidth: styles.maxWidth || 100, align: 'justify', lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
     } else {
-        this.text(text, x, y, { lineHeightFactor: styles.lineHeightFactor});
+        this.text(text, x, y, { lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
     }
 
 

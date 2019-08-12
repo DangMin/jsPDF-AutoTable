@@ -629,9 +629,25 @@ function drawTable(table) {
         nextPage(state_1.default().doc);
         table.cursor.y = table.margin('top');
     }
+    table.startPageNumber = state_1.default().pageNumber();
+    var firstRowHeight = 0, secondRowHeight = 0;
+    if (table.body) {
+        if (table.body[0]) {
+            var cells = Object.values(table.body[0].cells);
+            firstRowHeight = cells.reduce(function (acc, cell) { return acc < cell.height ? cell.height : acc; }, cells[0].height);
+        }
+        if (table.body[1]) {
+            var cells = Object.values(table.body[1].cells);
+            secondRowHeight = cells.reduce(function (acc, cell) { return acc > cell.height ? cell.height : acc; }, cells[0].height);
+        }
+    }
+    var lowerLimit = table.cursor.y + table.headHeight + firstRowHeight + secondRowHeight + table.margin('bottom');
+    if (lowerLimit > state_1.default().pageHeight()) {
+        nextPage(state_1.default().doc);
+        table.cursor.y = table.margin('top');
+    }
     table.pageStartX = table.cursor.x;
     table.pageStartY = table.cursor.y;
-    table.startPageNumber = state_1.default().pageNumber();
     common_1.applyUserStyles();
     if (settings.showHead === true || settings.showHead === 'firstPage' || settings.showHead === 'everyPage') {
         table.head.forEach(function (row) { return printRow(row); });
@@ -772,7 +788,8 @@ function printRow(row) {
             halign: cell.styles.halign,
             valign: cell.styles.valign,
             maxWidth: cell.width - cell.padding('left') - cell.padding('right'),
-            lineHeightFactor: cell.styles.lineHeightFactor || config_1.FONT_ROW_RATIO
+            lineHeightFactor: cell.styles.lineHeightFactor || config_1.FONT_ROW_RATIO,
+            charSpace: cell.styles.charSpace || 0
         });
         table.callCellHooks(table.cellHooks.didDrawCell, cell, row, column);
         table.cursor.x += column.width;
@@ -1850,7 +1867,7 @@ jsPDF.API.autoTableText = function (text, x, y, styles) {
             alignSize *= 0.5;
         if (lineCount >= 1) {
             for (var iLine = 0; iLine < splitText.length; iLine++) {
-                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y, { lineHeightFactor: styles.lineHeightFactor });
+                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y, { lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
                 y += fontSize;
             }
             return this;
@@ -1858,10 +1875,10 @@ jsPDF.API.autoTableText = function (text, x, y, styles) {
         x -= this.getStringUnitWidth(text) * alignSize;
     }
     if (styles.halign === 'justify') {
-        this.text(text, x, y, { maxWidth: styles.maxWidth || 100, align: 'justify', lineHeightFactor: styles.lineHeightFactor });
+        this.text(text, x, y, { maxWidth: styles.maxWidth || 100, align: 'justify', lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
     }
     else {
-        this.text(text, x, y, { lineHeightFactor: styles.lineHeightFactor });
+        this.text(text, x, y, { lineHeightFactor: styles.lineHeightFactor, charSpace: styles.charSpace || '0' });
     }
     return this;
 };

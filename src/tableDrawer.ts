@@ -207,7 +207,8 @@ function printRow(row) {
             halign: cell.styles.halign,
             valign: cell.styles.valign,
             maxWidth: cell.width - cell.padding('left') - cell.padding('right'),
-            lineHeightFactor: cell.styles.lineHeightFactor || FONT_ROW_RATIO
+            lineHeightFactor: cell.styles.lineHeightFactor || FONT_ROW_RATIO,
+            charSpace: cell.styles.charSpace || 0
         });
 
         table.callCellHooks(table.cellHooks.didDrawCell, cell, row, column);
